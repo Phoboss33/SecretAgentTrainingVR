@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -6,9 +7,12 @@ public class TileGenerator : MonoBehaviour {
     [SerializeField] private PropsTileFactory _propsFactory;
     [SerializeField] private SpiralFactory _spiralFactory;
     [SerializeField] private LeftRightFactory _leftRightFactory;
-
     [SerializeField] private int valueRangerOne;
     [SerializeField] private int valueRangerTwo;
+
+    public static event Action akimboEvent;
+    public static event Action saberEvent;
+    public static event Action idleEvent;
 
     private int _spawnTileCount = 0;
     private int _spiralTileCount = 0;
@@ -31,7 +35,7 @@ public class TileGenerator : MonoBehaviour {
         _currentWave = 1;
         _waveTileCount = 0;
         _spawnTileCount = 0;
-        _chooseValue = Random.Range(valueRangerOne, valueRangerTwo);
+        _chooseValue = UnityEngine.Random.Range(valueRangerOne, valueRangerTwo);
     }
 
     public void ActivateAnyFactories() {
@@ -58,25 +62,32 @@ public class TileGenerator : MonoBehaviour {
 
             // Spec Events
             else if (_chooseValue == 2 && _currentWave >= 2) {
-                print("akimbo pistol");
+                akimboEvent?.Invoke();
+
                 DefaultFactory();
                 _spawnTileCount %= 4 * _currentWave + GameInformationSingleton.Instance.specTileCount;
+                
             }
             else if (_chooseValue == 3 && _currentWave >= 2) {
-                print("laser saber");
+                saberEvent?.Invoke();
+
                 DefaultFactory();
                 _spawnTileCount %= 4 * _currentWave + GameInformationSingleton.Instance.specTileCount;
             }
 
             // На всякий
             else {
+                idleEvent?.Invoke();
+
                 DefaultFactory();
                 _spawnTileCount %= 4 + GameInformationSingleton.Instance.standartTileCount;
             }
         }
         else {
+            idleEvent?.Invoke();
+
             DefaultFactory();
-            _chooseValue = Random.Range(valueRangerOne, valueRangerTwo);
+            _chooseValue = UnityEngine.Random.Range(valueRangerOne, valueRangerTwo);
         }
     }
 

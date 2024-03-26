@@ -5,29 +5,52 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] private GameObject[] _sabers;
+    [SerializeField] private GameObject[] _pistols;
+
     private StateMachine _SM;
 
-    public static Action playerIdleStateevent;
+    //public static Action playerIdleStateevent;
+
+
+    private void Awake() {
+        TileGenerator.akimboEvent += ChangeStateOnAkimbo;
+        TileGenerator.saberEvent += ChangeStateOnSaber;
+        TileGenerator.idleEvent += ChangeStateOnIdle;
+    }
+
+    private void OnDisable() {
+        TileGenerator.akimboEvent -= ChangeStateOnAkimbo;
+        TileGenerator.saberEvent -= ChangeStateOnSaber;
+        TileGenerator.idleEvent -= ChangeStateOnIdle;
+    }
 
     private void Start() {
+        foreach (var item in _sabers) {
+            item.SetActive(false);
+        }
+        
+        foreach (var item in _pistols) {
+            item.SetActive(false);
+        }
+
         _SM = new StateMachine();
         _SM.Initialize(new IdleState());
     }
 
     private void Update() {
-        _SM.CurrentState.Update();
+        //_SM.CurrentState.Update();
         
-        if (Input.GetKeyUp(KeyCode.R)) {
-            _SM.ChangeState(new IdleState());
-            print("Состояние: " + _SM.CurrentState.ToString()); 
-        }
-        if (Input.GetKeyUp(KeyCode.T)) {
-            _SM.ChangeState(new WithAkimboState());
-            print("Состояние: " + _SM.CurrentState);
-        }
-        if (Input.GetKeyUp(KeyCode.Y)) {
-            _SM.ChangeState(new WithSaberState(10));
-            print("Состояние: " + _SM.CurrentState);
-        }
+
+    }
+
+    public void ChangeStateOnIdle() {
+        _SM.ChangeState(new IdleState());
+    }
+    public void ChangeStateOnAkimbo() {
+        _SM.ChangeState(new WithAkimboState(_pistols));
+    }
+    public void ChangeStateOnSaber() {
+        _SM.ChangeState(new WithSaberState(_sabers));
     }
 }

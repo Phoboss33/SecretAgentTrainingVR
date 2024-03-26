@@ -103,17 +103,25 @@ public class VelocityEstimator : MonoBehaviour
 		return average;
 	}
 
+    private void OnEnable() {
+        BeginEstimatingVelocity();
+    }
 
-	//-------------------------------------------------
-	void Awake()
+    private void OnDisable() {
+		FinishEstimatingVelocity();
+    }
+
+
+    //-------------------------------------------------
+    void Awake()
 	{
 		velocitySamples = new Vector3[velocityAverageFrames];
 		angularVelocitySamples = new Vector3[angularVelocityAverageFrames];
 
-		if ( estimateOnAwake )
-		{
-			BeginEstimatingVelocity();
-		}
+		//if ( estimateOnAwake )
+		//{
+			//BeginEstimatingVelocity();
+		//}
 	}
 
 

@@ -10,6 +10,6 @@ public class IdleState : State
     }
     public override void Exit() {
         base.Exit();
-        Debug.Log("Выход из изходного состояния");
+        Debug.Log("Выход из иcходного состояния");
     }
 }

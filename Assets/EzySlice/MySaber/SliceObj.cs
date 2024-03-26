@@ -34,13 +34,13 @@ public class SliceObj : MonoBehaviour
         if (hull != null) {
             GameObject upperHull = hull.CreateUpperHull(target, crossSectionMaterial);
             SetupSlicedComponent(upperHull);
-            upperHull.layer = 7;
-            Destroy(upperHull, 2f);
+            //upperHull.layer = 7;
+            Destroy(upperHull, 0.2f);
 
             GameObject loverHull = hull.CreateLowerHull(target, crossSectionMaterial);
             SetupSlicedComponent(loverHull);
-            Destroy(loverHull, 2f);
-            loverHull.layer = 7;
+            Destroy(loverHull, 0.2f);
+            //loverHull.layer = 7;
 
             Destroy(target);
         }
@@ -50,6 +50,7 @@ public class SliceObj : MonoBehaviour
         Rigidbody rb = slicedObject.AddComponent<Rigidbody>();
         MeshCollider collider = rb.AddComponent<MeshCollider>();
         collider.convex = true;
+        rb.velocity = Vector3.zero;
         rb.AddExplosionForce(cutForce, slicedObject.transform.position, 1f);
     }
 }
